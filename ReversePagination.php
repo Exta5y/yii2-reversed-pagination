@@ -8,7 +8,13 @@
 
 namespace loveorigami\pagination;
 
-
+/**
+ * Class ReversePagination
+ * @package loveorigami\pagination
+ *
+ * @property int offsetR
+ * @property int limitR
+ */
 class ReversePagination extends \yii\data\Pagination
 {
     /**
@@ -173,4 +179,23 @@ class ReversePagination extends \yii\data\Pagination
         return $pageSize < 1 ? -1 : $pageSize;
     }
 
+    public function getDop() {
+        if($this->totalCount % $this->getPageSize() > 0) {
+            return $this->getPageSize() - $this->totalCount % $this->getPageSize();
+        }
+
+        return 0;
+    }
+
+    public function getOffsetR() {
+        return $this->offset - $this->getDop();
+    }
+
+    public function getLimitR() {
+        if($this->offset == 0) {
+            return $this->limit - $this->getDop();
+        }
+
+        return $this->limit;
+    }
 } 
